@@ -6,40 +6,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    li {
-      color: gary;
-      cursor: pointer;
+    article {
+      width: 300px;
+      height: 300px;
+      background-color: aqua;
     }
 
-    li.on {
-      color: hotpink;
-    }
+    /*
+    css우선순위
+    1. id로 적용한 스타일이 class로 적용한 스타일보다 우선순위가 놓음
+    2.선택자가 길고 구체적인게 우선순위가 높음
+    3.위의 규칙을 무시하고 강제로 순위를 높이고 싶을때에는 속성구문 뒤에 !important
+    4.important로 적용했다 하더라도 자바스크립트로 스타일 덮어쓰기 가능 (오류)
+    */
   </style>
 </head>
 
 <body>
-  <ul class="btns">
-    <li class="on">button1</li>
-    <li>button2</li>
-    <li>button3</li>
-  </ul>
+  <article></article>
+
+  <a href="https://www.naver.com" target="_blank" title="네이버 페이지로 이동">네이버</a>
+
   <script>
-    const btns = document.querySelectorAll('.btns li');
-    //인수로 활성화시킬 순번을 전달받고
-    const activation = (arr, index) => {
-      const isOn = arr[index].classList.contains('on');
-      if (isOn) return;
-      console.log('activation');
-      //일단 모든버튼을 반복돌면서 비활성화(초기화)
-      arr.forEach(el => el.classList.remove('on'))
-      //인수로 받은 index순번의 버튼만 활성화
-      arr[index].classList.add('on');
-    }
-    //버튼을 반복돌면서 이벤트 연결
-    btns.forEach((btn, idx) => {
-      //이벤트가 발생하면 actuvation함수를 호출하면서 클릭한 버튼의 순번을 인수로 전달
-      btn.addEventListener('click', () => activation(btns, idx))
+    const box = document.querySelector('article');
+
+    //자바스크립트는 html외의 css파일에 대한 접근권한이 없으므로 css로 등록되어 있는 스타일 정보값을 가져오는게 불가
+    //결론 - 일반 css에 적용되어있는 스타일값을 가져오기위해서는 getComputedStyle메서드 사용
+    box.addEventListener('click', () => {
+      //box.style.backgroundColor = 'hotpink';
+      //box.style['background-color'] = 'hotpink';
+      //console.dir(box.style)
+
+      //getComputedStyle:이미 브라우저에 랜더링된 스타일을 다시 script로 연산해서 결과값을 반환
+      const boxstyle = getComputedStyle(box);
+      console.log(boxstyle['background-color'])
     })
+
   </script>
 
 </body>
